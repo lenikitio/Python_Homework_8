@@ -21,7 +21,15 @@ def find_data() -> None:
     print(result)
 
 
-def search(book: str, info: str) -> list[str]:
+def search(book: str, info: str) -> list[str] | str:
     """Находит в списке записи по определенному критерию поиска"""
-    book = book.split('\n')
-    return list(filter(lambda contact: info.lower() in contact.lower(), book))                  
+    result = [contact for contact in book if info.lower() in contact.lower()]
+    if not result:
+        return 'Ничего не нашёл'    
+    elif len(result) == 1:
+        return result[0]
+    elif len(result) > 1:
+        print()
+        print('\n' .join(result))
+        correct_info = input('Введите данные для уточнения контакта: ')
+        return search(result, correct_info)              
